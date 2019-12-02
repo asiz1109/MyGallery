@@ -7,10 +7,10 @@
     android:paddingStart="1dp"
     android:paddingEnd="1dp">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.example.mygallery.SquareImageView
         android:id="@+id/image_view"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="match_parent"
         android:scaleType="centerCrop"
         tools:src="@tools:sample/avatars" />
 
