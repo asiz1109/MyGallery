@@ -44,8 +44,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == READ_STORAGE_PERMISSION_REQUEST_CODE){
-            for (int i = 0, len = permissions.length; i < len; i++)
-                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) MainActivity.this.finish();
+            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                MainActivity.this.finish();
+            }
         }
     }
 }
