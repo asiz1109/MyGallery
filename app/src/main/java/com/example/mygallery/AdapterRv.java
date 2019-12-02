@@ -1,11 +1,14 @@
 package com.example.mygallery;
 
+import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,9 +17,9 @@ public class AdapterRv extends RecyclerView.Adapter<AdapterRv.MyViewHolder> {
 
     private List<MyImage> list = Collections.emptyList();
 
-    public void addItem(MyImage image){
-        list.add(image);
-        notifyItemInserted(list.size()-1);
+    public void setList(List<MyImage> image){
+        list = image;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -29,8 +32,11 @@ public class AdapterRv extends RecyclerView.Adapter<AdapterRv.MyViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         MyImage image = list.get(position);
-        String uri = image.getUri();
-//        holder.imageView.setImage() через Picasso
+        Uri uri = image.getUri();
+        Picasso.get()
+                .load(uri)
+                .transform(new CropSquareTransformation())
+                .into(holder.imageView);
     }
 
     @Override

@@ -1,11 +1,13 @@
 package com.example.mygallery;
 
+import android.net.Uri;
+
 public class MyImage {
 
     private int id;
-    private String uri;
+    private Uri uri;
 
-    public MyImage(int id, String uri) {
+    public MyImage(int id, Uri uri) {
         this.id = id;
         this.uri = uri;
     }
@@ -18,11 +20,11 @@ public class MyImage {
         this.id = id;
     }
 
-    public String getUri() {
+    public Uri getUri() {
         return uri;
     }
 
-    public void setUri(String uri) {
+    public void setUri(Uri uri) {
         this.uri = uri;
     }
 }
