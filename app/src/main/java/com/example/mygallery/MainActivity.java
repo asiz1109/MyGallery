@@ -1,28 +1,25 @@
 package com.example.mygallery;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ListenerRV{
 
     private RecyclerView recyclerView;
     private AdapterRv adapterRv;
@@ -38,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recycler_view);
         adapterRv = new AdapterRv();
+        adapterRv.setListener(this);
         recyclerView.setAdapter(adapterRv);
 
         if(getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_PORTRAIT){
@@ -84,12 +82,17 @@ public class MainActivity extends AppCompatActivity {
         int index = cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
         if (cursor!=null){
             while (cursor.moveToNext()) {
-                String absolutePathOfImage = cursor.getString(index);
-                Uri uri = Uri.fromFile(new File(absolutePathOfImage));
-                list.add(new MyImage(id, uri));
+                String absolutePath = cursor.getString(index);
+                Uri uri = Uri.fromFile(new File(absolutePath));
+                list.add(new MyImage(id, uri, absolutePath));
             }
         }
         cursor.close();
         adapterRv.setList(list);
+    }
+
+    @Override
+    public void onItemClick(MyImage myImage) {
+        startActivity(new Intent(MainActivity.this, ImageViewActivity.class).putExtra("absolutePath", myImage.getAbsolutePath()));
     }
 }

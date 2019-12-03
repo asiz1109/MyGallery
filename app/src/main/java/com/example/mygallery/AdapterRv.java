@@ -16,6 +16,7 @@ import java.util.List;
 public class AdapterRv extends RecyclerView.Adapter<AdapterRv.MyViewHolder> {
 
     private List<MyImage> list = Collections.emptyList();
+    private ListenerRV listenerRV;
 
     public void setList(List<MyImage> image){
         list = image;
@@ -37,11 +38,16 @@ public class AdapterRv extends RecyclerView.Adapter<AdapterRv.MyViewHolder> {
                 .load(uri)
                 .transform(new CropSquareTransformation())
                 .into(holder.imageView);
+        holder.setListener(image, listenerRV, position);
     }
 
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void setListener(ListenerRV listener) {
+        listenerRV = listener;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
@@ -51,6 +57,15 @@ public class AdapterRv extends RecyclerView.Adapter<AdapterRv.MyViewHolder> {
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.image_view);
+        }
+
+        void setListener(final MyImage myImage, final ListenerRV listenerRV, final int position) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listenerRV.onItemClick(myImage);
+                }
+            });
         }
     }
 }

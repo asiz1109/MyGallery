@@ -6,10 +6,12 @@ public class MyImage {
 
     private int id;
     private Uri uri;
+    private String absolutePath;
 
-    public MyImage(int id, Uri uri) {
+    public MyImage(int id, Uri uri, String absolutePath) {
         this.id = id;
         this.uri = uri;
+        this.absolutePath = absolutePath;
     }
 
     public int getId() {
@@ -26,5 +28,13 @@ public class MyImage {
 
     public void setUri(Uri uri) {
         this.uri = uri;
+    }
+
+    public String getAbsolutePath() {
+        return absolutePath;
+    }
+
+    public void setAbsolutePath(String absolutePath) {
+        this.absolutePath = absolutePath;
     }
 }
