@@ -12,12 +12,14 @@ import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements ListenerRV{
 
@@ -47,8 +49,6 @@ public class MainActivity extends AppCompatActivity implements ListenerRV{
         DividerItemDecoration decorator = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         decorator.setDrawable(this.getResources().getDrawable(R.drawable.divider_line));
         recyclerView.addItemDecoration(decorator);
-
-        getImages();
     }
 
     @Override
@@ -75,24 +75,29 @@ public class MainActivity extends AppCompatActivity implements ListenerRV{
     }
 
     private void getImages() {
-        ArrayList<MyImage> list = new ArrayList<>();
-        int id = 1;
-        String projection[] = {MediaStore.MediaColumns.DATA};
-        Cursor cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
-        int index = cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
-        if (cursor!=null){
-            while (cursor.moveToNext()) {
-                String absolutePath = cursor.getString(index);
-                Uri uri = Uri.fromFile(new File(absolutePath));
-                list.add(new MyImage(id, uri, absolutePath));
+        final ArrayList<MyImage> list = new ArrayList<>();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int id = 1;
+                String[] projection = {MediaStore.MediaColumns.DATA};
+                Cursor cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
+                int index = Objects.requireNonNull(cursor).getColumnIndex(MediaStore.MediaColumns.DATA);
+                if (cursor!=null){
+                    while (cursor.moveToNext()) {
+                        String absolutePath = cursor.getString(index);
+                        Uri uri = FileProvider.getUriForFile(MainActivity.this, "com.example.mygallery.provider", new File(absolutePath));
+                        list.add(new MyImage(id, uri));
+                    }
+                }
+                cursor.close();
             }
-        }
-        cursor.close();
+        }).start();
         adapterRv.setList(list);
     }
 
     @Override
     public void onItemClick(MyImage myImage) {
-        startActivity(new Intent(MainActivity.this, ImageViewActivity.class).putExtra("absolutePath", myImage.getAbsolutePath()));
+        startActivity(new Intent(MainActivity.this, ImageViewActivity.class).putExtra("uri", myImage.getUri()));
     }
 }

@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ImageViewActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ImageViewActivity">
 
     <ImageView
         android:id="@+id/full_iv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:src="@tools:sample/avatars"/>
+        tools:src="@tools:sample/avatars" />
 
 </LinearLayout>

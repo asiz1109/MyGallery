@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">My Gallery</string>
+    <string name="share">Share</string>
+    <string name="share_image">Share image via...</string>
 </resources>
