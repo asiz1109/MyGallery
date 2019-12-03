@@ -3,6 +3,7 @@ package com.example.mygallery;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -17,13 +18,16 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mygallery.RecyclerView.AdapterRv;
+import com.example.mygallery.RecyclerView.ListenerRV;
+import com.example.mygallery.RecyclerView.MyImage;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements ListenerRV{
+public class MainActivity extends AppCompatActivity implements ListenerRV {
 
-    private RecyclerView recyclerView;
     private AdapterRv adapterRv;
 
     private static final int READ_STORAGE_PERMISSION_REQUEST_CODE = 1001;
@@ -35,12 +39,12 @@ public class MainActivity extends AppCompatActivity implements ListenerRV{
 
         checkPermissionForReadExternalStorage();
 
-        recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
         adapterRv = new AdapterRv();
         adapterRv.setListener(this);
         recyclerView.setAdapter(adapterRv);
 
-        if(getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_PORTRAIT){
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         } else {
             recyclerView.setLayoutManager(new GridLayoutManager(this, 4, RecyclerView.VERTICAL, false));
@@ -83,12 +87,10 @@ public class MainActivity extends AppCompatActivity implements ListenerRV{
                 String[] projection = {MediaStore.MediaColumns.DATA};
                 Cursor cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
                 int index = Objects.requireNonNull(cursor).getColumnIndex(MediaStore.MediaColumns.DATA);
-                if (cursor!=null){
-                    while (cursor.moveToNext()) {
-                        String absolutePath = cursor.getString(index);
-                        Uri uri = FileProvider.getUriForFile(MainActivity.this, "com.example.mygallery.provider", new File(absolutePath));
-                        list.add(new MyImage(id, uri));
-                    }
+                while (cursor.moveToNext()) {
+                    String absolutePath = cursor.getString(index);
+                    Uri uri = FileProvider.getUriForFile(MainActivity.this, "com.example.mygallery.provider", new File(absolutePath));
+                    list.add(new MyImage(id, uri));
                 }
                 cursor.close();
             }
@@ -98,6 +100,6 @@ public class MainActivity extends AppCompatActivity implements ListenerRV{
 
     @Override
     public void onItemClick(MyImage myImage) {
-        startActivity(new Intent(MainActivity.this, ImageViewActivity.class).putExtra("uri", myImage.getUri()));
+        startActivity(new Intent(MainActivity.this, ImageViewActivity.class).putExtra("uri", myImage.getUri()).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 }

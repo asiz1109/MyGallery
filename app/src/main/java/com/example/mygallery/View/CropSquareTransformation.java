@@ -1,4 +1,4 @@
-package com.example.mygallery;
+package com.example.mygallery.View;
 
 import android.graphics.Bitmap;
 

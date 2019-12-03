@@ -1,22 +1,18 @@
 package com.example.mygallery;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.File;
+import com.github.chrisbanes.photoview.PhotoView;
 
 public class ImageViewActivity extends AppCompatActivity {
 
-    private ImageView full_iv;
     private Uri uri;
 
     @Override
@@ -24,11 +20,9 @@ public class ImageViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_view);
 
-        full_iv = findViewById(R.id.full_iv);
+        PhotoView full_iv = findViewById(R.id.full_iv);
         uri = getIntent().getParcelableExtra("uri");
-        Picasso.get()
-                .load(uri)
-                .into(full_iv);
+        full_iv.setImageURI(uri);
     }
 
     @Override

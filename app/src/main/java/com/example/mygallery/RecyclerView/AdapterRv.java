@@ -1,4 +1,4 @@
-package com.example.mygallery;
+package com.example.mygallery.RecyclerView;
 
 import android.net.Uri;
 import android.view.View;
@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mygallery.R;
+import com.example.mygallery.View.CropSquareTransformation;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
@@ -38,7 +40,7 @@ public class AdapterRv extends RecyclerView.Adapter<AdapterRv.MyViewHolder> {
                 .load(uri)
                 .transform(new CropSquareTransformation())
                 .into(holder.imageView);
-        holder.setListener(image, listenerRV, position);
+        holder.setListener(image, listenerRV);
     }
 
     @Override
@@ -54,12 +56,12 @@ public class AdapterRv extends RecyclerView.Adapter<AdapterRv.MyViewHolder> {
 
         ImageView imageView;
 
-        public MyViewHolder(@NonNull View itemView) {
+        MyViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.image_view);
         }
 
-        void setListener(final MyImage myImage, final ListenerRV listenerRV, final int position) {
+        void setListener(final MyImage myImage, final ListenerRV listenerRV) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

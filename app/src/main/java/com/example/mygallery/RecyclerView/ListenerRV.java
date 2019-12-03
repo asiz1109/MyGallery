@@ -1,4 +1,4 @@
-package com.example.mygallery;
+package com.example.mygallery.RecyclerView;
 
 public interface ListenerRV {
 
