@@ -4,20 +4,10 @@ import android.net.Uri;
 
 public class MyImage {
 
-    private int id;
     private Uri uri;
 
-    public MyImage(int id, Uri uri) {
-        this.id = id;
+    public MyImage(Uri uri) {
         this.uri = uri;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Uri getUri() {

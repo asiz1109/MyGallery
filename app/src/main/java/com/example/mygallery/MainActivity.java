@@ -1,6 +1,7 @@
 package com.example.mygallery;
 
 import android.Manifest;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -84,13 +85,16 @@ public class MainActivity extends AppCompatActivity implements ListenerRV {
             @Override
             public void run() {
                 int id = 1;
-                String[] projection = {MediaStore.MediaColumns.DATA};
+                String[] projection = {MediaStore.MediaColumns._ID};
                 Cursor cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
-                int index = Objects.requireNonNull(cursor).getColumnIndex(MediaStore.MediaColumns.DATA);
+                int index = Objects.requireNonNull(cursor).getColumnIndex(MediaStore.MediaColumns._ID);
                 while (cursor.moveToNext()) {
-                    String absolutePath = cursor.getString(index);
-                    Uri uri = FileProvider.getUriForFile(MainActivity.this, "com.example.mygallery.provider", new File(absolutePath));
-                    list.add(new MyImage(id, uri));
+//                    String absolutePath = cursor.getString(index);
+                    long store_id = cursor.getLong(index);
+//                    Uri uri = FileProvider.getUriForFile(MainActivity.this, "com.example.mygallery.provider", new File(absolutePath));
+                    Uri uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, store_id);
+
+                    list.add(new MyImage(uri));
                 }
                 cursor.close();
             }
