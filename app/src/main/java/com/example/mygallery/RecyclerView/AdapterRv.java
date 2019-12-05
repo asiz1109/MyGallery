@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mygallery.R;
-import com.example.mygallery.View.CropSquareTransformation;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
@@ -38,7 +37,8 @@ public class AdapterRv extends RecyclerView.Adapter<AdapterRv.MyViewHolder> {
         Uri uri = image.getUri();
         Picasso.get()
                 .load(uri)
-                .transform(new CropSquareTransformation())
+                .fit()
+                .centerCrop()
                 .into(holder.imageView);
         holder.setListener(image, listenerRV);
     }
