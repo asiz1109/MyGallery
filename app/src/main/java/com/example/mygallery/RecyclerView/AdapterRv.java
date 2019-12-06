@@ -37,8 +37,8 @@ public class AdapterRv extends RecyclerView.Adapter<AdapterRv.MyViewHolder> {
         Uri uri = image.getUri();
         Picasso.get()
                 .load(uri)
-//                .fit()
-//                .centerCrop()
+                .fit()
+                .centerCrop()
                 .into(holder.imageView);
         holder.setListener(image, listenerRV);
     }
