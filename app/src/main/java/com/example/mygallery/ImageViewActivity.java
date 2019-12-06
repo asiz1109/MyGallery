@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.chrisbanes.photoview.PhotoView;
+import com.squareup.picasso.Picasso;
 
 public class ImageViewActivity extends AppCompatActivity {
 
@@ -22,7 +23,7 @@ public class ImageViewActivity extends AppCompatActivity {
 
         PhotoView full_iv = findViewById(R.id.full_iv);
         uri = getIntent().getParcelableExtra("uri");
-        full_iv.setImageURI(uri);
+        Picasso.get().load(uri).into(full_iv);
     }
 
     @Override

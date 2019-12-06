@@ -40,13 +40,12 @@ public class MainActivity extends AppCompatActivity implements ListenerRV {
     private static final int COLUMNS_3 = 3;
     private static final int COLUMNS_4 = 4;
     private static final int HANDLER_MESSAGE = 65656;
+    private static final String EXTRA_URI = "uri";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        checkPermissionForReadExternalStorage();
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         adapterRv = new AdapterRv();
@@ -69,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements ListenerRV {
     @Override
     protected void onResume() {
         super.onResume();
+        checkPermissionForReadExternalStorage();
         getImages();
     }
 
@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements ListenerRV {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                int id = 1;
                 String[] projection = {MediaStore.MediaColumns._ID};
                 Cursor cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, MediaStore.Images.Media.DATE_TAKEN + " DESC");
                 int index = Objects.requireNonNull(cursor).getColumnIndex(MediaStore.MediaColumns._ID);
@@ -111,14 +110,12 @@ public class MainActivity extends AppCompatActivity implements ListenerRV {
 
     @Override
     public void onItemClick(MyImage myImage) {
-        startActivity(new Intent(MainActivity.this, ImageViewActivity.class).putExtra("uri", myImage.getUri()).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        startActivity(new Intent(MainActivity.this, ImageViewActivity.class).putExtra(EXTRA_URI, myImage.getUri()).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
 
     private void setList(){
         adapterRv.setList(list);
     }
-
-
 
     static class MyHandler extends Handler {
 
