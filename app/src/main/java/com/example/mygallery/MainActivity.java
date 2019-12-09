@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements ListenerRV {
     private static final int COLUMNS_3 = 3;
     private static final int COLUMNS_4 = 4;
     private static final int HANDLER_MESSAGE = 65656;
-    private static final String EXTRA_URI = "uri";
+    public static final String EXTRA_URI = "uri";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,16 +68,17 @@ public class MainActivity extends AppCompatActivity implements ListenerRV {
     @Override
     protected void onResume() {
         super.onResume();
-        checkPermissionForReadExternalStorage();
-        getImages();
+        if (checkPermissionForReadExternalStorage()) getImages();
     }
 
-    private void checkPermissionForReadExternalStorage() {
+    private boolean checkPermissionForReadExternalStorage() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_STORAGE_PERMISSION_REQUEST_CODE);
+                return false;
             }
         }
+        return true;
     }
 
     @Override
@@ -85,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements ListenerRV {
         if(requestCode == READ_STORAGE_PERMISSION_REQUEST_CODE){
             if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 MainActivity.this.finish();
+            } else {
+                getImages();
             }
         }
     }

@@ -22,7 +22,7 @@ public class ImageViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_image_view);
 
         PhotoView full_iv = findViewById(R.id.full_iv);
-        uri = getIntent().getParcelableExtra("uri");
+        uri = getIntent().getParcelableExtra(MainActivity.EXTRA_URI);
         Picasso.get().load(uri).into(full_iv);
     }
 
